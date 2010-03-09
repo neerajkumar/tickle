@@ -21,7 +21,8 @@ module Tickle
     pids =  fork_tests(groups)
 
     Signal.trap 'SIGINT', lambda { pids.each {|p| Process.kill("KILL", p)}; exit 1 }
-    Process.waitall
+    exit_statuses = Process.waitall.map { |pid,status| status.exitstatus }
+    raise "Error running #{dir}" if(exit_statuses.any? { |x| x != 0 })
   end
 
   def fork_tests(groups)
