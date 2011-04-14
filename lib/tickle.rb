@@ -51,7 +51,7 @@ module Tickle
 
     ActiveRecord::Base.establish_connection(config[db.to_s])
     ActiveRecord::Schema.verbose = false
-    FileUtils.cd do
+    FileUtils.cd(Rails.root) do
       system("rake db:schema:dump")
     end
     file = ENV['SCHEMA'] || "#{RAILS_ROOT}/db/schema.rb"
